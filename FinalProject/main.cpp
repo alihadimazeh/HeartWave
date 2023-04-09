@@ -4,6 +4,7 @@
 
 int main(int argc, char *argv[])
 {
+    //main class
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
