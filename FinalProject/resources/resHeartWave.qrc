@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/overlay">
+        <file>maindisplay.svg</file>
+    </qresource>
+</RCC>
