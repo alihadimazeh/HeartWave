@@ -19,11 +19,13 @@ SOURCES += \
     Session.cpp \
     main.cpp \
     mainwindow.cpp \
+    menu.cpp \
     qcustomplot.cpp
 
 HEADERS += \
     Session.h \
     mainwindow.h \
+    menu.h \
     qcustomplot.h
 
 FORMS += \
