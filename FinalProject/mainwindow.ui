@@ -291,7 +291,7 @@ color: rgb(58, 234, 36);</string>
            <rect>
             <x>20</x>
             <y>0</y>
-            <width>91</width>
+            <width>101</width>
             <height>21</height>
            </rect>
           </property>
@@ -299,7 +299,7 @@ color: rgb(58, 234, 36);</string>
            <string notr="true">background-color: rgb(27, 212, 0);</string>
           </property>
           <property name="text">
-           <string>sensor conected</string>
+           <string>sensor connected</string>
           </property>
          </widget>
         </widget>
