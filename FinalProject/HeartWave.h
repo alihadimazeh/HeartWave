@@ -37,7 +37,7 @@ class HeartWave{
         void beep(void); //prints statement to console
 
 
-    protected:
+    private:
         Battery* battery; //device's battery
         Session* currentSession; //session currentlyy underway
         QVector<Session*> sessions; //all previous sessions

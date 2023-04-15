@@ -24,7 +24,7 @@ class Session {
         float calculateCoherence(void);
         float updateBreathPacer(void); // calculate the new value of the breath pacer. get the ui to update it
 
-    protected:
+    private:
         float timeLapsed; //time duration of session
         float currentHRV; //current HRV value
         float achievementScore; //session's achievement score
