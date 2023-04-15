@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->BatteryRechargeAdminButton, SIGNAL(pressed()), this, SLOT(rechargeBattery()));
 
+    //set up a session
+
 }
 
 MainWindow::~MainWindow()

@@ -14,6 +14,7 @@ public:
 
 protected:
     Battery* battery;
+    Session* session;
     QVector<Session*> sessions;
     float breathPacerSetting;
 
@@ -22,6 +23,7 @@ public:
     bool isEmptyBattery();
     bool isLowCharge();
     Battery* getBattery();
+    Session* getSession();
     bool coherenceLevelChanged(); //checks if the coherence level changed
     void setBreathPacerSetting();
     void reset(); //resets settings
