@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QObject>
+#include <iostream>
+
 #include "Battery.h"
 #include "HeartWave.h"
 #include "menu.h"
@@ -34,11 +36,13 @@ private:
     QListWidget *activeQListWidget;
 
     void togglePower(void);
-    void initializeMainMenu(Menu* m);
+   void initializeMainMenu(Menu* m);
 
 private slots:
     void goToMainMenu(void);
-    void navigateBack(void);
+    void goBack(void);
+    void goUp(void);
+    void goDown(void);
     void turnOnOff(void);
     void rechargeBattery(void);
     void changeBatteryLevel(double newLevel);

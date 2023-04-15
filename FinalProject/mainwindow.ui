@@ -216,21 +216,6 @@ border-image: url(:/overlay/maindisplay.svg);</string>
 color: rgb(32, 74, 135);
 font: 63 14pt &quot;FreeSans&quot;;</string>
          </property>
-         <item>
-          <property name="text">
-           <string>Enter Session Mode</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>View Session Logs/History</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Settings</string>
-          </property>
-         </item>
         </widget>
         <widget class="QWidget" name="CoherenceLED" native="true">
          <property name="geometry">
@@ -279,8 +264,9 @@ font: 63 14pt &quot;FreeSans&quot;;</string>
            </rect>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(46, 52, 54);
-color: rgb(58, 234, 36);</string>
+           <string notr="true">background-color: rgb(136, 138, 133);
+color: rgb(255, 255, 255);
+selection-background-color: rgb(78, 154, 6);</string>
           </property>
           <property name="value">
            <number>100</number>
@@ -770,6 +756,24 @@ font: 63 10pt &quot;FreeSans&quot;;</string>
           </property>
          </widget>
         </widget>
+        <zorder>SessionSummaryView</zorder>
+        <zorder>HeartWaveGraphicsView</zorder>
+        <zorder>LeftButton</zorder>
+        <zorder>DownButton</zorder>
+        <zorder>RightButton</zorder>
+        <zorder>UpButton</zorder>
+        <zorder>OnOffButton</zorder>
+        <zorder>HomeButton</zorder>
+        <zorder>ReturnButton</zorder>
+        <zorder>PowerOffView</zorder>
+        <zorder>SelectorButton</zorder>
+        <zorder>CoherenceLED</zorder>
+        <zorder>Statusbar</zorder>
+        <zorder>SessionView</zorder>
+        <zorder>SettingsView</zorder>
+        <zorder>MainMenuLabel</zorder>
+        <zorder>HistoryView</zorder>
+        <zorder>MainMenuListView</zorder>
        </widget>
       </item>
       <item>
@@ -835,6 +839,9 @@ font: 63 10pt &quot;FreeSans&quot;;</string>
                   <width>82</width>
                   <height>30</height>
                  </size>
+                </property>
+                <property name="maximum">
+                 <double>100.000000000000000</double>
                 </property>
                </widget>
               </item>
