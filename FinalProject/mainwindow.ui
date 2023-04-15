@@ -285,7 +285,7 @@ selection-background-color: rgb(78, 154, 6);</string>
            <string notr="true">background-color: rgb(27, 212, 0);</string>
           </property>
           <property name="text">
-           <string>sensor connected</string>
+           <string>Sensor Connected</string>
           </property>
          </widget>
         </widget>
