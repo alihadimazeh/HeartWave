@@ -7,6 +7,7 @@
 #include "Battery.h"
 #include "Session.h"
 
+
 #define MAX_BP_SETTING 60
 #define MIN_BP_SETTING 0
 #define DEFAULT_BP_SETTING 10
@@ -15,7 +16,9 @@
 #define MID_COHERENCE_COLOR 'b'
 #define HIGH_COHERENCE_COLOR 'g'
 
+
 class HeartWave{
+
 
     public:
         //constructor and destructor
@@ -35,7 +38,6 @@ class HeartWave{
         void reset(void); //resets settings
         void updateLEDColor(char color);
         void beep(void); //prints statement to console
-
 
     protected:
         Battery* battery; //device's battery
