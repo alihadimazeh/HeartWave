@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QObject>
+#include "Battery.h"
+#include "HeartWave.h"
 
 #include "menu.h"
 
@@ -22,6 +25,8 @@ private:
     Menu* mainMenuOG;
     Menu* previousMenu;
 
+    HeartWave *heartWave;
+
     bool powerStatus;
 
     Ui::MainWindow *ui;
@@ -33,5 +38,9 @@ private slots:
     void navigateBack(void);
     void turnOnOff(void);
 
+
+
+private slots:
+    void rechargeBattery();
 };
 #endif // MAINWINDOW_H
