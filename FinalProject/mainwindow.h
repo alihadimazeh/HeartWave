@@ -37,10 +37,6 @@ private slots:
     void goToMainMenu(void);
     void navigateBack(void);
     void turnOnOff(void);
-
-
-
-private slots:
-    void rechargeBattery();
+    void rechargeBattery(void);
 };
 #endif // MAINWINDOW_H

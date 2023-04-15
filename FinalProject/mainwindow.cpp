@@ -7,21 +7,17 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    heartWave = new HeartWave();
+
     powerStatus = false;
     togglePower();
-
-
-    connect(ui->HomeButton, &QPushButton::pressed, this, &MainWindow::goToMainMenu);
-    connect(ui->ReturnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
     connect(ui->OnOffButton, &QPushButton::pressed, this, &MainWindow::turnOnOff);
 
-    ui->setupUi(this);
+     ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
 
-    Battery* battery = new Battery();
-    heartWave = new HeartWave();
-    ui->BatteryLevel->setValue(battery->getPercentage());
-
-    connect(ui->BatteryRechargeAdminButton, SIGNAL(pressed()), this, SLOT(rechargeBattery()));
+    connect(ui->BatteryRechargeAdminButton, &QPushButton::pressed, this, &MainWindow::rechargeBattery);
+    connect(ui->HomeButton, &QPushButton::pressed, this, &MainWindow::goToMainMenu);
+    connect(ui->ReturnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
 }
 
 MainWindow::~MainWindow()
@@ -29,10 +25,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::rechargeBattery(){
-    heartWave->getBattery()->recharge();
-    ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
-}
 /*
 void MainWindow::initializeMainMenu(Menu* m) {
 
@@ -122,5 +114,12 @@ void MainWindow::togglePower(void) {
     ui->BatteryPercentageAdminBox->setEnabled(powerStatus);
     ui->BatteryRechargeAdminButton->setEnabled(powerStatus);
     ui->SensorAttachedAdminBox->setEnabled(powerStatus);
+}
+
+/* function that recharges the device's battery
+ */
+void MainWindow::rechargeBattery(){
+    heartWave->getBattery()->recharge();
+    ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
 }
 
