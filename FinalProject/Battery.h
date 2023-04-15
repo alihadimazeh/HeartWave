@@ -9,14 +9,17 @@ class Battery{
         ~Battery();
 
         //Getters
-        inline int getPercentage(void) { return percentage; }
+        inline double getPercentage(void) { return percentage; }
+
+        //Setters
+        inline void setPercentage(double newPercentage) { percentage = newPercentage; }
 
         //memeber functions
         void drain(void);
         void recharge(void);
 
     private:
-        int percentage; //battery percentage
+        double percentage; //battery percentage
 
 }; //class Battery
 

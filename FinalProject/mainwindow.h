@@ -5,6 +5,7 @@
 #include <QObject>
 #include "Battery.h"
 #include "HeartWave.h"
+#include "menu.h"
 
 #include "menu.h"
 
@@ -21,8 +22,8 @@ public:
     ~MainWindow();
 
 private:
-    Menu* masterMenu;
-    Menu* mainMenuOG;
+    Menu* currentMenu;
+    Menu* mainMenu;
     Menu* previousMenu;
 
     HeartWave *heartWave;
@@ -30,13 +31,16 @@ private:
     bool powerStatus;
 
     Ui::MainWindow *ui;
+    QListWidget *activeQListWidget;
 
     void togglePower(void);
+    void initializeMainMenu(Menu* m);
 
 private slots:
     void goToMainMenu(void);
     void navigateBack(void);
     void turnOnOff(void);
     void rechargeBattery(void);
+    void changeBatteryLevel(double newLevel);
 };
 #endif // MAINWINDOW_H

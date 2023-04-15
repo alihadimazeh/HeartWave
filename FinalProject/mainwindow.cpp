@@ -9,13 +9,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     heartWave = new HeartWave();
 
+    /*currentMenu = new Menu("MAIN MENU", {"ENTER SESSION MODE", "VIEW LOGS/HISTORY", "SETTINGS"}, nullptr);
+    mainMenu = currentMenu;
+    previousMenu = nullptr;
+    //initializeMainMenu(currentMenu);
+
+    activeQListWidget = ui->MainMenuListView;
+    //activeQListWidget->addItems(currentMenu->getMenuItems());
+   // activeQListWidget->setCurrentRow(0);
+    ui->MainMenuLabel->setText(currentMenu->getName());*/
+
     powerStatus = false;
     togglePower();
     connect(ui->OnOffButton, &QPushButton::pressed, this, &MainWindow::turnOnOff);
 
-     ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
 
-    connect(ui->BatteryRechargeAdminButton, &QPushButton::pressed, this, &MainWindow::rechargeBattery);
+     ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
+     connect(ui->BatteryPercentageAdminBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &MainWindow::changeBatteryLevel);
+     connect(ui->BatteryRechargeAdminButton, &QPushButton::pressed, this, &MainWindow::rechargeBattery);
+
     connect(ui->HomeButton, &QPushButton::pressed, this, &MainWindow::goToMainMenu);
     connect(ui->ReturnButton, &QPushButton::pressed, this, &MainWindow::navigateBack);
 }
@@ -28,38 +40,15 @@ MainWindow::~MainWindow()
 /*
 void MainWindow::initializeMainMenu(Menu* m) {
 
-    QStringList frequenciesList;
-    QStringList programsList;
+    Menu* sessionMode = new Menu("SESSION MODE", {}, m);
+    Menu* history = new Menu("HISTORY", {}, m);
+    Menu* settings = new Menu("SETTINGS", {}, m);
 
-    for (Therapy* f : this->frequencies) {
-        frequenciesList.append(f->getName());
-    }
-    for (Therapy* p : this->programs) {
-        programsList.append(p->getName());
-    }
-
-    Menu* programs = new Menu("PROGRAMS", programsList, m);
-    Menu* frequencies = new Menu("FREQUENCIES", frequenciesList, m);
-    Menu* history = new Menu("HISTORY", {"VIEW","CLEAR"}, m);
-
-    m->addChildMenu(programs);
-    m->addChildMenu(frequencies);
+    m->addChildMenu(sessionMode);
     m->addChildMenu(history);
+    m->addChildMenu(settings);
+}*/
 
-    for (Therapy* f : this->frequencies) {
-        frequencies->addChildMenu(new Menu(f->getName(), {}, frequencies));
-    }
-
-    for (Therapy* p : this->programs) {
-        programs->addChildMenu(new Menu(p->getName(), {}, programs));
-    }
-
-    Menu* viewHistory = new Menu("VIEW",{}, history);
-    Menu* clearHistory = new Menu("CLEAR", {"YES","NO"}, history);
-    history->addChildMenu(viewHistory);
-    history->addChildMenu(clearHistory);
-}
-*/
 
 /* function that navigates back to the main menu
  */
@@ -75,7 +64,7 @@ void MainWindow::goToMainMenu(void) {
 }
 
 void MainWindow::navigateBack(void) {
-    masterMenu = previousMenu;
+    currentMenu = previousMenu;
 }
 
 /* function that changes powerStatus to the opposite of what it is and calls togglePower
@@ -114,6 +103,34 @@ void MainWindow::togglePower(void) {
     ui->BatteryPercentageAdminBox->setEnabled(powerStatus);
     ui->BatteryRechargeAdminButton->setEnabled(powerStatus);
     ui->SensorAttachedAdminBox->setEnabled(powerStatus);
+}
+
+void MainWindow::changeBatteryLevel(double newPercentage) {
+
+    if ((newPercentage >= 0) && (newPercentage <= 100)) {
+
+        if ((newPercentage == 0) && (powerStatus == true)) {
+            togglePower();
+            heartWave->getBattery()->setPercentage(0);
+        }else{
+            heartWave->getBattery()->setPercentage(newPercentage);
+        }
+
+        ui->BatteryPercentageAdminBox->setValue(newPercentage);
+        ui->BatteryLevel->setValue(int(newPercentage));
+
+
+        if (int(newPercentage) >= 50) {
+            ui->BatteryLevel->setStyleSheet("QProgressBar { selection-background-color: rgb(78, 154, 6); background-color: rgb(0, 0, 0); }");
+        }
+        else if (int(newPercentage) >= 20) {
+            ui->BatteryLevel->setStyleSheet("QProgressBar { selection-background-color: rgb(196, 160, 0); background-color: rgb(0, 0, 0); }");
+        }
+        else {
+            ui->BatteryLevel->setStyleSheet("QProgressBar { selection-background-color: rgb(164, 0, 0); background-color: rgb(0, 0, 0); }");
+        }
+    }
+
 }
 
 /* function that recharges the device's battery
