@@ -9,8 +9,6 @@
 #include "HeartWave.h"
 #include "menu.h"
 
-#include "menu.h"
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -40,6 +38,7 @@ private:
    void initializeMainMenu(Menu* m);
 
 private slots:
+
     void goToMainMenu(void);
     void goBack(void);
     void goUp(void);
@@ -48,5 +47,7 @@ private slots:
     void turnOnOff(void);
     void rechargeBattery(void);
     void changeBatteryLevel(double newLevel);
+    void updateSensorConnectedLabel(int index);
+
 };
 #endif // MAINWINDOW_H

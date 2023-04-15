@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(ui->SensorAttachedAdminBox, QOverload<int>::of(&QComboBox::currentIndexChanged),this, &MainWindow::updateSensorConnectedLabel);
 
     //create instance of device
     heartWave = new HeartWave();
@@ -50,6 +51,18 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::updateSensorConnectedLabel(int index)
+{
+    if (index == 1) { // "False" option selected
+        ui->SensorConectedLabel->setText("Sensor Disconnected");
+        ui->SensorConectedLabel->setStyleSheet("background-color: red");
+    } else { // "True" option selected
+        ui->SensorConectedLabel->setText("Sensor Connected");
+        ui->SensorConectedLabel->setStyleSheet("background-color: rgb(27, 212, 0)");
+    }
+}
+
 
 void MainWindow::initializeMainMenu(Menu* m) {
 
