@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "menu.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -16,6 +18,20 @@ public:
     ~MainWindow();
 
 private:
+    Menu* masterMenu;
+    Menu* mainMenuOG;
+    Menu* previousMenu;
+
+    bool powerStatus;
+
     Ui::MainWindow *ui;
+
+    void togglePower(void);
+
+private slots:
+    void goToMainMenu(void);
+    void navigateBack(void);
+    void turnOnOff(void);
+
 };
 #endif // MAINWINDOW_H

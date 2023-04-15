@@ -145,7 +145,7 @@ border-image: url(:/overlay/maindisplay.svg);</string>
           <string>Home Button</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="BackReturn">
+        <widget class="QPushButton" name="ReturnButton">
          <property name="geometry">
           <rect>
            <x>50</x>
@@ -163,13 +163,13 @@ border-image: url(:/overlay/maindisplay.svg);</string>
           <rect>
            <x>30</x>
            <y>90</y>
-           <width>551</width>
+           <width>545</width>
            <height>271</height>
           </rect>
          </property>
          <property name="minimumSize">
           <size>
-           <width>300</width>
+           <width>545</width>
            <height>250</height>
           </size>
          </property>
@@ -180,10 +180,10 @@ border-image: url(:/overlay/maindisplay.svg);</string>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true"/>
+          <string notr="true">background-color: rgb(46, 52, 54);</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="PushButton">
+        <widget class="QPushButton" name="SelectorButton">
          <property name="geometry">
           <rect>
            <x>250</x>
