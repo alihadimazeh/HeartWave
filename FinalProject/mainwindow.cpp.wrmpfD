@@ -9,11 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     Battery* battery = new Battery();
-    heartWave = new HeartWave();
+//    connect(ui->BatteryLevel, SIGNAL(pressed), this, SLOT(rechargeBattery()));
+    // set battery level to default value
     ui->BatteryLevel->setValue(battery->getPercentage());
-
-    connect(ui->BatteryRechargeAdminButton, SIGNAL(pressed()), this, SLOT(rechargeBattery()));
-
+    connect(ui->BatteryRechargeAdminButton, SIGNAL(pressed()), this, SLOT(rechargeBattery(Battery* battery)));
 }
 
 MainWindow::~MainWindow()
@@ -21,10 +20,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::rechargeBattery(){
-    heartWave->getBattery()->recharge();
-    ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
+void MainWindow::rechargeBattery(Battery* b){
+    b->recharge();
 }
+
 /*
 void MainWindow::initializeMainMenu(Menu* m) {
 
