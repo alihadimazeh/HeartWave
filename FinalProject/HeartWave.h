@@ -2,9 +2,18 @@
 #define HEARTWAVE_H
 
 #include <QVector>
+#include <iostream>
+
 #include "Battery.h"
 #include "Session.h"
 
+#define MAX_BP_SETTING 60
+#define MIN_BP_SETTING 0
+#define DEFAULT_BP_SETTING 10
+
+#define LOW_COHERENCE_COLOR 'r'
+#define MID_COHERENCE_COLOR 'b'
+#define HIGH_COHERENCE_COLOR 'g'
 
 class HeartWave{
 
@@ -24,7 +33,7 @@ class HeartWave{
         bool coherenceLevelChanged(void); //checks if the coherence level changed
         void setBreathPacerSetting(float newSetting);
         void reset(void); //resets settings
-        void updateLEDcolor(char color);
+        void updateLEDColor(char color);
         void beep(void); //prints statement to console
 
 
