@@ -32,6 +32,7 @@ private:
 
     Ui::MainWindow *ui;
     QListWidget *activeQListWidget;
+    QWidget *activeWidget;
 
     void togglePower(void);
    void initializeMainMenu(Menu* m);
@@ -42,6 +43,7 @@ private slots:
     void goBack(void);
     void goUp(void);
     void goDown(void);
+    void selectMenuOption(void);
     void turnOnOff(void);
     void rechargeBattery(void);
     void changeBatteryLevel(double newLevel);

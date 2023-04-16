@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     activeQListWidget->setCurrentRow(0);
     ui->MainMenuLabel->setText(currentMenu->getName());
 
+    activeWidget = activeQListWidget;
+
     //set power status and toggle power
     powerStatus = false;
     togglePower();
@@ -91,21 +93,65 @@ void MainWindow::goBack(void) {
    currentMenu = previousMenu;
 }
 
+/* Function that navigates up the menu
+ */
 void MainWindow::goUp(void) {
+    if(activeWidget != activeQListWidget) { return; }
 
     int nextIndex = activeQListWidget->currentRow() - 1;
 
     if (nextIndex < 0) {
-        nextIndex = activeQListWidget->count() - 1; //wrap around?
+        nextIndex = activeQListWidget->count() - 1; //wrap around
     }
 
     activeQListWidget->setCurrentRow(nextIndex);
-
 }
 
+/* Function that naviagtes down the menu
+ */
 void MainWindow::goDown(void) {
+    if(activeWidget != activeQListWidget) { return; }
 
+    int previousIndex = activeQListWidget->currentRow() + 1;
+
+    if (previousIndex >= activeQListWidget->count()) {
+        previousIndex = 0; //wrap around
+    }
+
+    activeQListWidget->setCurrentRow(previousIndex);
 }
+
+/* Function that selects a a menu option
+ */
+/*void MainWindow::selectMenuOption(void) {
+
+    if(currentMenu->getName() == "Enter Session Mode") { //start session
+        heartWave->startSession();
+    }
+
+    if(activeWidget != activeQListWidget) { //if current widget is not a list
+
+        if(activeWidget == ui->SessionView) {
+            heartWave->startSession();
+        }
+
+    } else {
+
+        int index = activeQListWidget->currentRow();
+        if (index < 0) return;
+
+        if(activeQListWidget == ui->MainMenuListView) {
+
+        } else if(activeQListWidget == ui->HistoryView) {
+
+        }
+
+    //if selecting enter session mode
+
+    //if selecting view history/logs
+
+    //if selecting settins
+}*/
 
 /* function that changes powerStatus to the opposite of what it is and calls togglePower
  */
@@ -180,7 +226,7 @@ void MainWindow::changeBatteryLevel(double newPercentage) {
 
 /* function that recharges the device's battery
  */
-void MainWindow::rechargeBattery(){
+void MainWindow::rechargeBattery(void){
     heartWave->getBattery()->recharge();
     ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
     ui->BatteryPercentageAdminBox->setValue(heartWave->getBattery()->getPercentage());
