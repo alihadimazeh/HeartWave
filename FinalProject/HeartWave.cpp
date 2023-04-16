@@ -3,6 +3,7 @@
 //constructor
 HeartWave::HeartWave(){
     battery = new Battery();
+    breathPacerSetting = DEFAULT_BP_SETTING;
     //currentSession = new Session();
 }
 

@@ -474,7 +474,7 @@ font: 63 14pt &quot;FreeSans&quot;;</string>
            </rect>
           </property>
           <property name="text">
-           <string>0</string>
+           <string>1</string>
           </property>
          </widget>
          <widget class="QLabel" name="MaxBreathPacer">
@@ -532,6 +532,12 @@ font: 63 14pt &quot;FreeSans&quot;;</string>
             <width>111</width>
             <height>31</height>
            </rect>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>30</number>
           </property>
          </widget>
          <widget class="QLabel" name="ResetLabel">
@@ -756,7 +762,6 @@ font: 63 10pt &quot;FreeSans&quot;;</string>
           </property>
          </widget>
         </widget>
-        <zorder>SessionSummaryView</zorder>
         <zorder>HeartWaveGraphicsView</zorder>
         <zorder>LeftButton</zorder>
         <zorder>DownButton</zorder>
@@ -769,11 +774,12 @@ font: 63 10pt &quot;FreeSans&quot;;</string>
         <zorder>SelectorButton</zorder>
         <zorder>CoherenceLED</zorder>
         <zorder>Statusbar</zorder>
-        <zorder>SessionView</zorder>
-        <zorder>SettingsView</zorder>
         <zorder>MainMenuLabel</zorder>
         <zorder>HistoryView</zorder>
         <zorder>MainMenuListView</zorder>
+        <zorder>SessionView</zorder>
+        <zorder>SettingsView</zorder>
+        <zorder>SessionSummaryView</zorder>
        </widget>
       </item>
       <item>

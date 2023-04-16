@@ -7,10 +7,13 @@
 #include <QRandomGenerator>
 #include <QString>
 #include <QDebug>
+#include <QDateTime>
 
 class Session {
 
     public:
+        static int currentId;
+
         //constructor and destructor
         Session();
         ~Session();
@@ -18,6 +21,8 @@ class Session {
         //Getters
         inline float getDuration(void) { return timeLapsed; }
         inline float getAchievementScore(void) { return achievementScore; }
+        inline QDateTime getDateTime(void) { return date; }
+        inline int getSessionID(void) { return sessionId; }
 
         //memeber functions
         float calculateHRV(void); // HRV is variabilty between heartbeat. like calculating slope
@@ -30,6 +35,8 @@ class Session {
         float achievementScore; //session's achievement score
         QVector<int> coherenceScores; //session's coherence scores
         QCustomPlot HRVGraph; //session's HRV graph. x axis: time (our own values), y axis: heartrate
+        QDateTime date;
+        int sessionId;
 };
 
 #endif // SESSION_H
