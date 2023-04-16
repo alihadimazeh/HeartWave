@@ -1,10 +1,13 @@
 #include "Session.h"
 
+int Session::currentId = 0;
+
 //constructor
 Session::Session(){
     timeLapsed = 0;
     achievementScore = 0.0f;
     currentHRV = 0.0f;
+    sessionId = currentId;
 
 
     coherenceScores.resize(16);
@@ -22,6 +25,7 @@ Session::Session(){
         qDebug() << coherenceScores[i];
     }*/
 
+    currentId++;
 }
 
 //destructor

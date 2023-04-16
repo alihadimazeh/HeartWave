@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QObject>
 #include <iostream>
+#include <QVector>
 
 #include "Battery.h"
 #include "HeartWave.h"
@@ -35,7 +36,8 @@ private:
     QWidget *activeWidget;
 
     void togglePower(void);
-   void initializeMainMenu(Menu* m);
+    void initializeMainMenu(Menu* m);
+    void updateView(const QString, const QStringList); //QWidget *active_widget);
 
 private slots:
 
@@ -48,6 +50,8 @@ private slots:
     void rechargeBattery(void);
     void changeBatteryLevel(double newLevel);
     void updateSensorConnectedLabel(int index);
+    void changeBPSetting(int newSetting);
+    void resetSettings(void);
 
 };
 #endif // MAINWINDOW_H

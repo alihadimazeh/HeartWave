@@ -27,7 +27,10 @@ class HeartWave{
 
         //Getters
         inline Battery* getBattery(void) { return battery; }
-        Session* getCurrentSession(void) { return currentSession; }
+        inline Session* getCurrentSession(void) { return currentSession; }
+        inline QVector<Session*> getSessionHistory(void) { return sessions; }
+        inline int getHistorySize(void) { return sessions.size(); }
+        inline int getBP(void) { return breathPacerSetting; }
 
         //memeber functions
         bool startSession(void);

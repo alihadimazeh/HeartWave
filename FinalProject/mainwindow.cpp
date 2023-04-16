@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     activeQListWidget->setCurrentRow(0);
     ui->MainMenuLabel->setText(currentMenu->getName());
 
-    activeWidget = activeQListWidget;
+    //activeWidget = activeQListWidget;
 
     //set power status and toggle power
     powerStatus = false;
@@ -41,6 +41,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->ReturnButton, &QPushButton::pressed, this, &MainWindow::goBack);
     connect(ui->UpButton, &QPushButton::pressed, this, &MainWindow::goUp);
     connect(ui->DownButton, &QPushButton::pressed, this, &MainWindow::goDown);
+    connect(ui->SelectorButton, &QPushButton::pressed, this, &MainWindow::selectMenuOption);
+
+    //settings
+    ui->BreathPacerSetting->setValue(heartWave->getBP());
+    connect(ui->BreathPacerSetting, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::changeBPSetting);
+    connect(ui->ResetButton, &QPushButton::pressed, this, &MainWindow::resetSettings);
 
     //block signals to right and left button (never used)
     ui->RightButton->blockSignals(true);
@@ -66,21 +72,31 @@ void MainWindow::updateSensorConnectedLabel(int index)
 
 void MainWindow::initializeMainMenu(Menu* m) {
 
-    Menu* sessionMode = new Menu("Session Mode", {}, m);
-    Menu* history = new Menu("History", {}, m);
-    Menu* settings = new Menu("Settings", {}, m);
+    Menu* sessionMode = new Menu("SESSION MODE", {}, m);
+    Menu* history = new Menu("HISTORY", {}, m);
+    Menu* settings = new Menu("SETTINGS", {}, m);
 
     m->addChildMenu(sessionMode);
     m->addChildMenu(history);
     m->addChildMenu(settings);
+
+    //sessionMode->addChildMenu(new Menu("session", {}, sessionMode));
+    //settings->addChildMenu(new Menu("settings", {}, settings));
 }
 
 
 /* function that navigates back to the main menu
  */
 void MainWindow::goToMainMenu(void) {
-    ui->MainMenuListView->setVisible(true);
-    ui->MainMenuLabel->setVisible(true);
+   // activeQListWidget = ui->MainMenuListView;
+    //activeWidget = activeQListWidget;
+    //MainWindow::updateView(activeWidget);
+    /*ui->MainMenuListView->setVisible(true);
+    ui->MainMenuLabel->setVisible(true);*/
+
+    currentMenu = mainMenu;
+    activeWidget = ui->MainMenuListView;
+    MainWindow::updateView(mainMenu->getName(), mainMenu->getMenuItems());
 
     ui->HistoryView->setVisible(false);
     ui->SessionView->setVisible(false);
@@ -90,13 +106,27 @@ void MainWindow::goToMainMenu(void) {
 }
 
 void MainWindow::goBack(void) {
-   currentMenu = previousMenu;
+   //currentMenu = previousMenu;
+
+   if (currentMenu->getName() == "MAIN MENU") {
+       activeQListWidget->setCurrentRow(0);
+   }
+   else {
+       currentMenu = currentMenu->getParent();
+       updateView(currentMenu->getName(), currentMenu->getMenuItems());
+   }
+
+   ui->HistoryView->setVisible(false);
+   ui->SessionView->setVisible(false);
+   ui->PowerOffView->setVisible(false);
+   ui->SettingsView->setVisible(false);
+   ui->SessionSummaryView->setVisible(false);
 }
 
 /* Function that navigates up the menu
  */
 void MainWindow::goUp(void) {
-    if(activeWidget != activeQListWidget) { return; }
+    //if(activeWidget != activeQListWidget) { return; }
 
     int nextIndex = activeQListWidget->currentRow() - 1;
 
@@ -110,7 +140,7 @@ void MainWindow::goUp(void) {
 /* Function that naviagtes down the menu
  */
 void MainWindow::goDown(void) {
-    if(activeWidget != activeQListWidget) { return; }
+    //if(activeWidget != activeQListWidget) { return; }
 
     int previousIndex = activeQListWidget->currentRow() + 1;
 
@@ -123,16 +153,53 @@ void MainWindow::goDown(void) {
 
 /* Function that selects a a menu option
  */
-/*void MainWindow::selectMenuOption(void) {
+void MainWindow::selectMenuOption(void) {
 
-    if(currentMenu->getName() == "Enter Session Mode") { //start session
-        heartWave->startSession();
+    int index = activeQListWidget->currentRow();
+    //if (index < 0) return;
+
+    // --------- Prevent crashes - ie. when selector button has no effect
+
+    //Prevent crash when selector button is pressed in settings screen
+    if(currentMenu->getName() == "SETTINGS") { return ; }
+
+    //Prevent crash when selector button is pressed in session summary view
+    if(currentMenu->getName() == "SESSION SUMMARY") { return; }
+
+    // ------------------------------------------------------------------
+
+    //If the menu is a parent and clicking on it should display more menus.
+    if (currentMenu->getMenuItems().length() > 0) {
+        currentMenu = currentMenu->get(index);
+
+        if(index == 0) { activeWidget = ui->SessionView; }
+        else if(index == 1) { activeWidget = ui->HistoryView; }
+        else if(index == 2) { activeWidget = ui->SettingsView; }
+
+        MainWindow::updateView(currentMenu->getName(), currentMenu->getMenuItems());
+    }
+    else if (currentMenu->getMenuItems().length() == 0) {
+        if(currentMenu->getName() == "SESSION MODE") {
+            heartWave->startSession();
+        }
     }
 
-    if(activeWidget != activeQListWidget) { //if current widget is not a list
+    /*if(activeWidget != activeQListWidget) { //if current widget is not a list
 
-        if(activeWidget == ui->SessionView) {
-            heartWave->startSession();
+        // --------- Prevent crashes - ie. when selector button has no effect
+
+        //Prevent crash when selector button is pressed in settings screen
+        if(activeWidget == ui->SettingsView) { return ; }
+
+        //Prevent crash when selector button is pressed in session summary view
+        else if(activeWidget == ui->SessionSummaryView) { return; }
+
+        // ------------------------------------------------------------------
+
+
+        //Start session when selector function is pressed in session mode (session screen)
+        else if(activeWidget == ui->SessionView) {
+            heartWave->startSession(); //start session
         }
 
     } else {
@@ -141,17 +208,71 @@ void MainWindow::goDown(void) {
         if (index < 0) return;
 
         if(activeQListWidget == ui->MainMenuListView) {
+            int index = activeQListWidget->currentRow();
 
+            if(index == 0) { activeWidget = ui->SessionView; }
+            else if(index == 1) { activeWidget = ui->HistoryView; }
+            else if(index == 2) { activeWidget = ui->SettingsView; }
+
+            MainWindow::updateView(activeWidget);
         } else if(activeQListWidget == ui->HistoryView) {
-
+            return; //TODO: Change This Later
         }
 
-    //if selecting enter session mode
+    }*/
 
-    //if selecting view history/logs
 
-    //if selecting settins
-}*/
+}
+
+/* Function that updaates the device's view
+ */
+void MainWindow::updateView(const QString selectedItem, const QStringList menuItems) {
+
+    activeQListWidget->clear();
+    activeQListWidget->addItems(menuItems);
+    activeQListWidget->setCurrentRow(0);
+
+    ui->MainMenuLabel->setText(selectedItem);
+    activeWidget->setVisible(true);
+
+
+
+    /*//if the active widget is not a list
+    if(activeWidget != activeQListWidget) {
+        //activeWidget = active_widget;
+
+        if(activeWidget == ui->SettingsView) {
+            ui->MainMenuLabel->setText("SETTINGS");
+        } else if(activeWidget == ui->SessionSummaryView) {
+             ui->MainMenuLabel->setText("SESSION SUMMARY");
+        }
+
+        activeWidget->setVisible(true);
+
+    } else {
+        activeQListWidget->clear();
+
+        if(activeQListWidget == ui->MainMenuListView) {
+            activeQListWidget->addItems({"Enter Session Mode", "View Logs/History", "Settings"});
+            activeQListWidget->setCurrentRow(0);
+            ui->MainMenuLabel->setText("MAIN MENU");
+
+        } else if(activeQListWidget == ui->HistoryView) {
+            if(heartWave->getHistorySize() > 0) {
+                QVector<Session*> sessionHistory = heartWave->getSessionHistory();
+                for(int i=0; i < heartWave->getHistorySize(); i++) {
+                    QString session = "Session ID: " + QString::number(sessionHistory[i]->getSessionID()) + "    |    " + "Date/Time: " + sessionHistory[i]->getDateTime().toString();
+                    activeQListWidget->addItem(session);
+                    activeQListWidget->setCurrentRow(0);
+                }
+            }
+
+            ui->MainMenuLabel->setText("HISTORY");
+        }
+
+        activeWidget->setVisible(true);
+    }*/
+}
 
 /* function that changes powerStatus to the opposite of what it is and calls togglePower
  */
@@ -169,6 +290,7 @@ void MainWindow::turnOnOff(void) {
 void MainWindow::togglePower(void) {
 
     //set visibility of widgets
+    //if(active)
     activeQListWidget->setVisible(powerStatus);
     ui->PowerOffView->setVisible(!powerStatus); //always set opposite to power status
     //ui->MainMenuListView->setVisible(powerStatus);
@@ -179,6 +301,10 @@ void MainWindow::togglePower(void) {
     ui->SettingsView->setVisible(powerStatus);
     ui->SessionSummaryView->setVisible(powerStatus);
 
+    //reset menu position
+    if (powerStatus) {
+        MainWindow::goToMainMenu();
+    }
 
     //enable or disable buttons base on power status
     //powerStatus = true (ie. on) -> enable buttons
@@ -224,7 +350,7 @@ void MainWindow::changeBatteryLevel(double newPercentage) {
 
 }
 
-/* function that recharges the device's battery
+/* Function that recharges the device's battery
  */
 void MainWindow::rechargeBattery(void){
     heartWave->getBattery()->recharge();
@@ -232,3 +358,17 @@ void MainWindow::rechargeBattery(void){
     ui->BatteryPercentageAdminBox->setValue(heartWave->getBattery()->getPercentage());
 }
 
+/* Function that changes the setting of the breath pacer
+ */
+void MainWindow::changeBPSetting(int newSetting) {
+    heartWave->setBreathPacerSetting(newSetting);
+    std::cout << "HeartWave - Breath Pacer Setting: " << heartWave->getBP() << std::endl;
+}
+
+/* Function that resets/reverts the device's settings to initial install conditions
+ */
+void MainWindow::resetSettings(void) {
+    heartWave->reset();
+    ui->BreathPacerSetting->setValue(heartWave->getBP());
+    std::cout << "Settings have been reset. Current Settings:   BP - " << heartWave->getBP() << std::endl;
+}
