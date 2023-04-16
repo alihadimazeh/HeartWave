@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QDateTime>
 
+#define VECTOR_SIZE 16
+
 class Session {
 
     public:
@@ -19,8 +21,8 @@ class Session {
         ~Session();
 
         //Getters
-        inline float getDuration(void) { return timeLapsed; }
-        inline float getAchievementScore(void) { return achievementScore; }
+        inline double getDuration(void) { return timeLapsed; }
+        inline double getAchievementScore(void) { return achievementScore; }
         inline QDateTime getDateTime(void) { return date; }
         inline int getSessionID(void) { return sessionId; }
 

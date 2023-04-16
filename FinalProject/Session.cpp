@@ -10,20 +10,12 @@ Session::Session(){
     sessionId = currentId;
 
 
-    coherenceScores.resize(16);
+    coherenceScores.resize(VECTOR_SIZE);
     // populate the coherence scores vector with randomized data
     QRandomGenerator generator;
     for (int i=0; i<coherenceScores.size(); i++){
-        coherenceScores[i] = generator.bounded(16);
+        coherenceScores[i] = generator.bounded(VECTOR_SIZE);
     }
-
-
-    // printing out the values
-    // delete later. confirmed it works as of 4:46 AM 04/15
-    /*
-    for (int i=0; i<coherenceScores.size(); i++){
-        qDebug() << coherenceScores[i];
-    }*/
 
     currentId++;
 }
@@ -33,20 +25,9 @@ Session::~Session() {
 
 }
 
-//TODO: IMPLEMENT FOLLOWING FUNCTIONS AFTER RESEARCH
-
 /* Function that calculates the current heart rate variability (HRV)
  */
 double Session::calculateHRV(QVector<double>& heartRates) {
-    //how does one math?? ;-;
-    //TODO: figure out math and get gud
-    //Helpful resource?? -> https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5624990/#:~:text=It%20is%20calculated%20by%20first,average%20of%20these%20288%20values.
-
-    // loop between all of the heartbeats
-    // calculate HRV point between every heartbeat
-    // append that calculated HRV to the graph
-    // HRV is a measure of the variation in time intervals between heartbeats.
-
     QVector<double> rrIntervals;
     for (int i=1; i<heartRates.size(); i++){
         double rrInterval = heartRates[i] - heartRates[i-1];
@@ -79,25 +60,33 @@ double Session::calculateHRV(QVector<double>& heartRates) {
  *                 might be removed in a future commit
  */
 double Session::calculateCoherence(int flag) {
-    // flag determines which coherence level
-    // low coherence
+    QRandomGenerator randomGenerator;
     if (flag == 0){
         // generate low coherence data
+        double coherenceScore = randomGenerator.bounded(0.5);
+        qDebug() << "Generated Low Level Coherence Score: " << coherenceScore;
+        return coherenceScore;
     }
     else if (flag == 1){
-        // generate medium coherence level
+        // generate medium coherence data
+        double coherenceScore = randomGenerator.generateDouble() * 0.5 + 0.5;
+        qDebug() << "Generated Medium Level Coherence Score: " << coherenceScore;
+        return coherenceScore;
     }
     else if (flag == 2){
-        // generate high coherence level
+        // generate high coherence data
+        double coherenceScore = randomGenerator.generateDouble() * 15.0 + 1.0;
+        qDebug() << "Generated High Coherence Score";
+        return coherenceScore;
     }
 
-    return 0.0f; //PLACEHOLDER! CHANGE LATER
+    return 0.0;
 }
 
 /* Function that calulates the optimal breathPacer setting and returns it
  * Returns: optimal breathPacer setting
  */
-double Session::updateBreathPacer(void) {
+double Session::updateBreathPacer() {
     //I have no clue
 
     return 0.0f; //PLACEHOLDER! CHANGE LATER
