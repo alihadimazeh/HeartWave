@@ -29,7 +29,7 @@ class Session {
         float currentHRV; //current HRV value
         float achievementScore; //session's achievement score
         QVector<int> coherenceScores; //session's coherence scores
-        QCustomPlot HRVGraph; //session's HRV graph
+        QCustomPlot HRVGraph; //session's HRV graph. x axis: time (our own values), y axis: heartrate
 };
 
 #endif // SESSION_H

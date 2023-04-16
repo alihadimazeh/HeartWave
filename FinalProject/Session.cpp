@@ -7,7 +7,7 @@ Session::Session(){
     currentHRV = 0.0f;
 
 
-    coherenceScores.resize(20);
+    coherenceScores.resize(16);
     // populate the coherence scores vector with randomized data
     QRandomGenerator generator;
     for (int i=0; i<coherenceScores.size(); i++){
@@ -38,6 +38,9 @@ float Session::calculateHRV() {
     //TODO: figure out math and get gud
     //Helpful resource?? -> https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5624990/#:~:text=It%20is%20calculated%20by%20first,average%20of%20these%20288%20values.
 
+    // loop between all of the heartbeats
+    // calculate HRV point between every heartbeat
+    // append that calculated HRV to the graph
     return 0.0f; //PLACEHOLDER! CHANGE LATER
 }
 
