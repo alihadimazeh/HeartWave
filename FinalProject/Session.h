@@ -27,7 +27,7 @@ class Session {
         inline int getSessionID(void) { return sessionId; }
 
         //memeber functions
-        double calculateHRV(QVector<double>&); // HRV is variabilty between heartbeat. like calculating slope
+        double calculateHRV(QVector<int>&); // HRV is variabilty between heartbeat. like calculating slope
         double calculateCoherence(int);
         double updateBreathPacer(void); // calculate the new value of the breath pacer. get the ui to update it
 

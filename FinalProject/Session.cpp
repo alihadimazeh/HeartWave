@@ -27,7 +27,7 @@ Session::~Session() {
 
 /* Function that calculates the current heart rate variability (HRV)
  */
-double Session::calculateHRV(QVector<double>& heartRates) {
+double Session::calculateHRV(QVector<int>& heartRates) {
     QVector<double> rrIntervals;
     for (int i=1; i<heartRates.size(); i++){
         double rrInterval = heartRates[i] - heartRates[i-1];
@@ -66,14 +66,12 @@ double Session::calculateCoherence(int flag) {
         double coherenceScore = randomGenerator.bounded(0.5);
         qDebug() << "Generated Low Level Coherence Score: " << coherenceScore;
         return coherenceScore;
-    }
-    else if (flag == 1){
+    }  else if (flag == 1){
         // generate medium coherence data
         double coherenceScore = randomGenerator.generateDouble() * 0.5 + 0.5;
         qDebug() << "Generated Medium Level Coherence Score: " << coherenceScore;
         return coherenceScore;
-    }
-    else if (flag == 2){
+    } else if (flag == 2){
         // generate high coherence data
         double coherenceScore = randomGenerator.generateDouble() * 15.0 + 1.0;
         qDebug() << "Generated High Coherence Score";
