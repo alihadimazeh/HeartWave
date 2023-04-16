@@ -20,16 +20,16 @@ class Session {
         inline float getAchievementScore(void) { return achievementScore; }
 
         //memeber functions
-        float calculateHRV(void); // HRV is variabilty between heartbeat. like calculating slope
-        float calculateCoherence(void);
-        float updateBreathPacer(void); // calculate the new value of the breath pacer. get the ui to update it
+        double calculateHRV(QVector<double>&); // HRV is variabilty between heartbeat. like calculating slope
+        double calculateCoherence(int);
+        double updateBreathPacer(void); // calculate the new value of the breath pacer. get the ui to update it
 
-    private:
-        float timeLapsed; //time duration of session
-        float currentHRV; //current HRV value
-        float achievementScore; //session's achievement score
+    protected:
+        double timeLapsed; //time duration of session
+        double currentHRV; //current HRV value
+        double achievementScore; //session's achievement score
         QVector<int> coherenceScores; //session's coherence scores
-        QCustomPlot HRVGraph; //session's HRV graph
+        QCustomPlot HRVGraph; //session's HRV graph. x axis: time (our own values), y axis: heartrate
 };
 
 #endif // SESSION_H
