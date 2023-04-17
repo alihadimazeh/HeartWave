@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include <iostream>
+#include <QRandomGenerator>
 
 #include "Battery.h"
 #include "Session.h"
@@ -32,7 +33,7 @@ class HeartWave{
         inline int getHistorySize(void) { return sessions.size(); }
         inline int getBP(void) { return breathPacerSetting; }
 
-        //memeber functions
+        //member functions
         bool startSession(void);
         bool isEmptyBattery(void);
         bool isLowCharge(void);
@@ -41,14 +42,17 @@ class HeartWave{
         void reset(void); //resets settings
         void updateLEDColor(char color);
         void beep(void); //prints statement to console
+        // make 3 functions that generate different types of heart rates
+        QVector<int> coherentHeartRates();
+        QVector<int> incoherentHeartRates();
 
 
     private:
         Battery* battery; //device's battery
         Session* currentSession; //session currentlyy underway
         QVector<Session*> sessions; //all previous sessions
-        float breathPacerSetting; //breath pacer setting
         bool sensorConnected; //sensor
+        int breathPacerSetting; //breath pacer setting
 
 
 }; //class HeartWave

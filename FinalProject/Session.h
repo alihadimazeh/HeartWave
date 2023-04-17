@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QDateTime>
 
+#define VECTOR_SIZE 16
+
 class Session {
 
     public:
@@ -19,13 +21,13 @@ class Session {
         ~Session();
 
         //Getters
-        inline float getDuration(void) { return timeLapsed; }
-        inline float getAchievementScore(void) { return achievementScore; }
+        inline double getDuration(void) { return timeLapsed; }
+        inline double getAchievementScore(void) { return achievementScore; }
         inline QDateTime getDateTime(void) { return date; }
         inline int getSessionID(void) { return sessionId; }
 
         //memeber functions
-        double calculateHRV(QVector<double>&); // HRV is variabilty between heartbeat. like calculating slope
+        double calculateHRV(QVector<int>&); // HRV is variabilty between heartbeat. like calculating slope
         double calculateCoherence(int);
         double updateBreathPacer(void); // calculate the new value of the breath pacer. get the ui to update it
 

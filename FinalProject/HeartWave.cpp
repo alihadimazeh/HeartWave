@@ -30,7 +30,6 @@ bool HeartWave::isLowCharge(void) {
     if(battery->getPercentage() <= 20) { //if low battery
         return true;
     }
-
     return false;
 }
 
@@ -84,11 +83,41 @@ void HeartWave::beep(void) {
 bool HeartWave::startSession() {
 
     //TODO: remove later. (testing code)
+    // follow use case 1
+    // create a new session object
+    // pass in a heartbeat and any other data we need
+    // start a while loop
+    // take in heart beat
+    // calculate hrv, calculates coherence
+    // update LED according to coherence level
+    // update breath pacer level
+    // loop through steps 7-9 until user termination
     std::cout << "In HeartWave::startSession - function working" <<std::endl;
 
-
+    currentSession = new Session();
+    sessions.append(currentSession);
 
     return false;
+}
+
+QVector<int> HeartWave::coherentHeartRates(){
+    QRandomGenerator randomGenerator;
+    QVector<int> heartRates;
+    for (int i=0; i<100; i++){
+        int heartRate = randomGenerator.bounded(60, 101);
+        heartRates.append(heartRate);
+    }
+    return heartRates;
+}
+
+QVector<int> HeartWave::incoherentHeartRates(){
+    QRandomGenerator randomGenerator;
+    QVector<int> heartRates;
+    for (int i=0; i<100; i++){
+        int heartRate = randomGenerator.bounded(10, 175);
+        heartRates.append(heartRate);
+    }
+    return heartRates;
 }
 
 
