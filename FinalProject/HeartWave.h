@@ -48,6 +48,7 @@ class HeartWave{
         Session* currentSession; //session currentlyy underway
         QVector<Session*> sessions; //all previous sessions
         float breathPacerSetting; //breath pacer setting
+        bool sensorConnected; //sensor
 
 
 }; //class HeartWave

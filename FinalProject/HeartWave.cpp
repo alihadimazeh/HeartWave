@@ -4,6 +4,7 @@
 HeartWave::HeartWave(){
     battery = new Battery();
     breathPacerSetting = DEFAULT_BP_SETTING;
+    sensorConnected = false;
     //currentSession = new Session();
 }
 
@@ -84,6 +85,8 @@ bool HeartWave::startSession() {
 
     //TODO: remove later. (testing code)
     std::cout << "In HeartWave::startSession - function working" <<std::endl;
+
+
 
     return false;
 }

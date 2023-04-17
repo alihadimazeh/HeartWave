@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->SensorAttachedAdminBox, QOverload<int>::of(&QComboBox::currentIndexChanged),this, &MainWindow::updateSensorConnectedLabel);
 
     //create instance of device
     heartWave = new HeartWave();
@@ -14,7 +13,6 @@ MainWindow::MainWindow(QWidget *parent)
     //initialize menu structure
     currentMenu = new Menu("MAIN MENU", {"Enter Session Mode", "View Logs/History", "Settings"}, nullptr);
     mainMenu = currentMenu;
-    previousMenu = nullptr;
     initializeMainMenu(currentMenu);
 
     //Set active widget to main menu
@@ -33,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     //battery ui interface
     ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
     ui->BatteryPercentageAdminBox->setValue(heartWave->getBattery()->getPercentage());
+    ui->BatteryWarning->setVisible(false);
     connect(ui->BatteryPercentageAdminBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &MainWindow::changeBatteryLevel);
     connect(ui->BatteryRechargeAdminButton, &QPushButton::pressed, this, &MainWindow::rechargeBattery);
 
@@ -47,6 +46,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->BreathPacerSetting->setValue(heartWave->getBP());
     connect(ui->BreathPacerSetting, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::changeBPSetting);
     connect(ui->ResetButton, &QPushButton::pressed, this, &MainWindow::resetSettings);
+
+    //admin tab interface
+    ui->SensorAttachedAdminBox->setCurrentIndex(1);
+    updateSensorConnectedLabel(ui->SensorAttachedAdminBox->currentIndex());
+    connect(ui->SensorAttachedAdminBox, QOverload<int>::of(&QComboBox::currentIndexChanged),this, &MainWindow::updateSensorConnectedLabel);
 
     //block signals to right and left button (never used)
     ui->RightButton->blockSignals(true);
@@ -63,9 +67,11 @@ void MainWindow::updateSensorConnectedLabel(int index)
     if (index == 1) { // "False" option selected
         ui->SensorConectedLabel->setText("Sensor Disconnected");
         ui->SensorConectedLabel->setStyleSheet("background-color: red");
+        ui->SensorWarning->setVisible(true);
     } else { // "True" option selected
         ui->SensorConectedLabel->setText("Sensor Connected");
         ui->SensorConectedLabel->setStyleSheet("background-color: rgb(27, 212, 0)");
+        ui->SensorWarning->setVisible(false);
     }
 }
 
@@ -80,20 +86,12 @@ void MainWindow::initializeMainMenu(Menu* m) {
     m->addChildMenu(history);
     m->addChildMenu(settings);
 
-    //sessionMode->addChildMenu(new Menu("session", {}, sessionMode));
-    //settings->addChildMenu(new Menu("settings", {}, settings));
 }
 
 
 /* function that navigates back to the main menu
  */
 void MainWindow::goToMainMenu(void) {
-   // activeQListWidget = ui->MainMenuListView;
-    //activeWidget = activeQListWidget;
-    //MainWindow::updateView(activeWidget);
-    /*ui->MainMenuListView->setVisible(true);
-    ui->MainMenuLabel->setVisible(true);*/
-
     currentMenu = mainMenu;
     activeWidget = ui->MainMenuListView;
     MainWindow::updateView(mainMenu->getName(), mainMenu->getMenuItems());
@@ -106,7 +104,6 @@ void MainWindow::goToMainMenu(void) {
 }
 
 void MainWindow::goBack(void) {
-   //currentMenu = previousMenu;
 
    if (currentMenu->getName() == "MAIN MENU") {
        activeQListWidget->setCurrentRow(0);
@@ -170,57 +167,35 @@ void MainWindow::selectMenuOption(void) {
 
     //If the menu is a parent and clicking on it should display more menus.
     if (currentMenu->getMenuItems().length() > 0) {
-        currentMenu = currentMenu->get(index);
-
-        if(index == 0) { activeWidget = ui->SessionView; }
-        else if(index == 1) { activeWidget = ui->HistoryView; }
-        else if(index == 2) { activeWidget = ui->SettingsView; }
-
-        MainWindow::updateView(currentMenu->getName(), currentMenu->getMenuItems());
-    }
-    else if (currentMenu->getMenuItems().length() == 0) {
-        if(currentMenu->getName() == "SESSION MODE") {
-            heartWave->startSession();
-        }
-    }
-
-    /*if(activeWidget != activeQListWidget) { //if current widget is not a list
-
-        // --------- Prevent crashes - ie. when selector button has no effect
-
-        //Prevent crash when selector button is pressed in settings screen
-        if(activeWidget == ui->SettingsView) { return ; }
-
-        //Prevent crash when selector button is pressed in session summary view
-        else if(activeWidget == ui->SessionSummaryView) { return; }
-
-        // ------------------------------------------------------------------
-
-
-        //Start session when selector function is pressed in session mode (session screen)
-        else if(activeWidget == ui->SessionView) {
-            heartWave->startSession(); //start session
-        }
-
-    } else {
-
-        int index = activeQListWidget->currentRow();
-        if (index < 0) return;
-
-        if(activeQListWidget == ui->MainMenuListView) {
-            int index = activeQListWidget->currentRow();
+        if(currentMenu->getName() == "MAIN MENU") {
+            currentMenu = currentMenu->get(index);
 
             if(index == 0) { activeWidget = ui->SessionView; }
             else if(index == 1) { activeWidget = ui->HistoryView; }
             else if(index == 2) { activeWidget = ui->SettingsView; }
 
-            MainWindow::updateView(activeWidget);
-        } else if(activeQListWidget == ui->HistoryView) {
-            return; //TODO: Change This Later
+            MainWindow::updateView(currentMenu->getName(), currentMenu->getMenuItems());
+        }else if(currentMenu->getName() == "HISTORY") {
+            currentMenu = currentMenu->get(index);
+
+            MainWindow::updateView(currentMenu->getName(), currentMenu->getMenuItems());
         }
-
-    }*/
-
+    }
+    else if (currentMenu->getMenuItems().length() == 0) {
+        if(currentMenu->getName() == "SESSION MODE") {
+            if(ui->SensorAttachedAdminBox->currentIndex() == 0) {
+                if(heartWave->startSession()) { //would be nice if it returns a bool
+                    return;
+                }else{
+                    ui->SensorWarning->setVisible(true);
+                    return;
+                }
+            }else{
+                ui->SensorWarning->setVisible(true);
+                return;
+            }
+        }
+    }
 
 }
 
@@ -234,44 +209,6 @@ void MainWindow::updateView(const QString selectedItem, const QStringList menuIt
 
     ui->MainMenuLabel->setText(selectedItem);
     activeWidget->setVisible(true);
-
-
-
-    /*//if the active widget is not a list
-    if(activeWidget != activeQListWidget) {
-        //activeWidget = active_widget;
-
-        if(activeWidget == ui->SettingsView) {
-            ui->MainMenuLabel->setText("SETTINGS");
-        } else if(activeWidget == ui->SessionSummaryView) {
-             ui->MainMenuLabel->setText("SESSION SUMMARY");
-        }
-
-        activeWidget->setVisible(true);
-
-    } else {
-        activeQListWidget->clear();
-
-        if(activeQListWidget == ui->MainMenuListView) {
-            activeQListWidget->addItems({"Enter Session Mode", "View Logs/History", "Settings"});
-            activeQListWidget->setCurrentRow(0);
-            ui->MainMenuLabel->setText("MAIN MENU");
-
-        } else if(activeQListWidget == ui->HistoryView) {
-            if(heartWave->getHistorySize() > 0) {
-                QVector<Session*> sessionHistory = heartWave->getSessionHistory();
-                for(int i=0; i < heartWave->getHistorySize(); i++) {
-                    QString session = "Session ID: " + QString::number(sessionHistory[i]->getSessionID()) + "    |    " + "Date/Time: " + sessionHistory[i]->getDateTime().toString();
-                    activeQListWidget->addItem(session);
-                    activeQListWidget->setCurrentRow(0);
-                }
-            }
-
-            ui->MainMenuLabel->setText("HISTORY");
-        }
-
-        activeWidget->setVisible(true);
-    }*/
 }
 
 /* function that changes powerStatus to the opposite of what it is and calls togglePower
@@ -339,12 +276,15 @@ void MainWindow::changeBatteryLevel(double newPercentage) {
 
         if (int(newPercentage) >= 50) {
             ui->BatteryLevel->setStyleSheet("QProgressBar { selection-background-color: rgb(78, 154, 6); background-color: rgb(136, 138, 133); color: rgb(255, 255, 255); }");
+            ui->BatteryWarning->setVisible(false);
         }
         else if (int(newPercentage) >= 20) {
             ui->BatteryLevel->setStyleSheet("QProgressBar { selection-background-color: rgb(196, 160, 0); background-color: rgb(136, 138, 133); color: rgb(255, 255, 255); }");
+            ui->BatteryWarning->setVisible(false);
         }
         else {
             ui->BatteryLevel->setStyleSheet("QProgressBar { selection-background-color: rgb(164, 0, 0); background-color: rgb(136, 138, 133); color: rgb(255, 255, 255); }");
+            ui->BatteryWarning->setVisible(true);
         }
     }
 
@@ -356,13 +296,13 @@ void MainWindow::rechargeBattery(void){
     heartWave->getBattery()->recharge();
     ui->BatteryLevel->setValue(heartWave->getBattery()->getPercentage());
     ui->BatteryPercentageAdminBox->setValue(heartWave->getBattery()->getPercentage());
+    ui->BatteryWarning->setVisible(false);
 }
 
 /* Function that changes the setting of the breath pacer
  */
 void MainWindow::changeBPSetting(int newSetting) {
     heartWave->setBreathPacerSetting(newSetting);
-    std::cout << "HeartWave - Breath Pacer Setting: " << heartWave->getBP() << std::endl;
 }
 
 /* Function that resets/reverts the device's settings to initial install conditions
@@ -370,5 +310,30 @@ void MainWindow::changeBPSetting(int newSetting) {
 void MainWindow::resetSettings(void) {
     heartWave->reset();
     ui->BreathPacerSetting->setValue(heartWave->getBP());
-    std::cout << "Settings have been reset. Current Settings:   BP - " << heartWave->getBP() << std::endl;
 }
+
+/*
+void MainWindow::startSession() {
+    //create new session
+    Session* session = new Session();
+
+    //calculate HRV
+
+
+    //calculate coherence
+
+
+    //update led light
+    //heartWave->updateLEDColor();
+    //ui->CoherenceLED->setStyleSheet("background-color: red");
+
+
+    //update breath pacer
+
+
+    //calculate percentage of time in different coherence levels
+    //calculate average coherence
+    //calculate acheivement score
+
+
+}*/

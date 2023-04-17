@@ -25,7 +25,6 @@ public:
 private:
     Menu* currentMenu;
     Menu* mainMenu;
-    Menu* previousMenu;
 
     HeartWave *heartWave;
 
@@ -38,6 +37,7 @@ private:
     void togglePower(void);
     void initializeMainMenu(Menu* m);
     void updateView(const QString, const QStringList); //QWidget *active_widget);
+    void startSession();
 
 private slots:
 
