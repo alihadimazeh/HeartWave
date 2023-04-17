@@ -51,6 +51,7 @@ class HeartWave{
         Battery* battery; //device's battery
         Session* currentSession; //session currentlyy underway
         QVector<Session*> sessions; //all previous sessions
+        bool sensorConnected; //sensor
         int breathPacerSetting; //breath pacer setting
 
 

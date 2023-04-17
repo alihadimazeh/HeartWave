@@ -2,7 +2,7 @@
 
 //constructor
 Battery::Battery(){
-    percentage = 85; //change this to 100 later
+    percentage = 100;
 }
 
 //destructor

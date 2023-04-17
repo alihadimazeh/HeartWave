@@ -4,6 +4,7 @@
 HeartWave::HeartWave(){
     battery = new Battery();
     breathPacerSetting = DEFAULT_BP_SETTING;
+    sensorConnected = false;
     //currentSession = new Session();
 }
 
