@@ -37,7 +37,7 @@ private:
     void togglePower(void);
     void initializeMainMenu(Menu* m);
     void updateView(const QString, const QStringList); //QWidget *active_widget);
-    void startSession();
+    //void startSession();
 
 private slots:
 

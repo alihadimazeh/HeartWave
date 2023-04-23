@@ -97,7 +97,7 @@ bool HeartWave::startSession() {
     currentSession = new Session();
     sessions.append(currentSession);
 
-    return false;
+    return true;
 }
 
 QVector<int> HeartWave::coherentHeartRates(){
